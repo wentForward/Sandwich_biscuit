@@ -10,6 +10,7 @@ import com.example.sandwichbiscuit.data.LoginRepository;
 import com.example.sandwichbiscuit.data.Result;
 import com.example.sandwichbiscuit.data.model.LoggedInUser;
 import com.example.sandwichbiscuit.R;
+import com.example.sandwichbiscuit.database.Database;
 
 public class LoginViewModel extends ViewModel {
 
@@ -29,15 +30,23 @@ public class LoginViewModel extends ViewModel {
         return loginResult;
     }
 
-    public void login(String username, String password) {
+    public void login(String username, String password, Database db) {
         // can be launched in a separate asynchronous job
-        Result<LoggedInUser> result = loginRepository.login(username, password);
+        Result<LoggedInUser> result = loginRepository.login(username, password, db);
 
         if (result instanceof Result.Success) {
             LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
             loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
         } else {
-            loginResult.setValue(new LoginResult(R.string.login_failed));
+            String errorInf = result.toString();
+            System.out.println(errorInf);
+            if (errorInf.equals("Error[exception=java.io.IOException: this user doesn't exists]")) {
+                loginResult.setValue(new LoginResult(R.string.username_noexist));
+            } else if (errorInf.equals("Error[exception=java.io.IOException: password is wrong]")) {
+                loginResult.setValue(new LoginResult(R.string.password_wrong));
+            } else {
+                loginResult.setValue(new LoginResult(R.string.login_failed));
+            }
         }
     }
 

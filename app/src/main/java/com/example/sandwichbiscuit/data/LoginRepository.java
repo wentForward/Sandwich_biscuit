@@ -1,6 +1,7 @@
 package com.example.sandwichbiscuit.data;
 
 import com.example.sandwichbiscuit.data.model.LoggedInUser;
+import com.example.sandwichbiscuit.database.Database;
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -43,9 +44,9 @@ public class LoginRepository {
         // @see https://developer.android.com/training/articles/keystore
     }
 
-    public Result<LoggedInUser> login(String username, String password) {
+    public Result<LoggedInUser> login(String username, String password, Database db) {
         // handle login
-        Result<LoggedInUser> result = dataSource.login(username, password);
+        Result<LoggedInUser> result = dataSource.login(username, password, db);
         if (result instanceof Result.Success) {
             setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
         }

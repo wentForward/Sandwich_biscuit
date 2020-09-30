@@ -5,6 +5,7 @@ import android.app.Activity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -23,8 +24,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sandwichbiscuit.R;
+import com.example.sandwichbiscuit.database.Database;
 import com.example.sandwichbiscuit.ui.login.LoginViewModel;
 import com.example.sandwichbiscuit.ui.login.LoginViewModelFactory;
+import com.example.sandwichbiscuit.ui.register.RegisterActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -36,10 +39,12 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
+        final Database db = new Database(this);
 
         final EditText usernameEditText = findViewById(R.id.username);
         final EditText passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.login);
+        final Button registerButton = findViewById(R.id.register);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
@@ -103,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
+                            passwordEditText.getText().toString(), db);
                 }
                 return false;
             }
@@ -114,9 +119,16 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                        passwordEditText.getText().toString(), db);
             }
         });
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent it = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(it);
+            }
+        } );
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
@@ -128,4 +140,5 @@ public class LoginActivity extends AppCompatActivity {
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
+
 }
