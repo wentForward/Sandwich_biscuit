@@ -21,4 +21,15 @@
     <string name="error_invalid_reg_password">"密码不合法，请设置长度超过6位的密码"</string>
     <string name="error_invalid_confirm_password">"两次输入的密码不一致，请检查后重新输入"</string>
     <string name="register_success">"注册成功！"</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Sandwich biscuit</string>
+    <string name="nav_header_subtitle">not login</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Quit</string>
+
+    <string name="menu_home">Learn</string>
+    <string name="menu_gallery">Shop</string>
+    <string name="menu_slideshow">Games</string>
 </resources>
